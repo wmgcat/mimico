@@ -1,4 +1,7 @@
 # mimico
+
+![Icon](./icon.png)
+
 Telegram-bot for send welcome-message on channel's posts
 ## Install, Run & Build
 Install:
