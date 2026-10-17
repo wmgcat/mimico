@@ -1,20 +1,23 @@
 {
   "name": "mimico",
-  "version": "1.0.0",
+  "version": "26.10.0",
+  "description": "Telegram-bot for send welcome-message on channel's posts",
   "main": "index.ts",
   "type": "module",
   "scripts": {
     "start": "tsx index.ts",
-    "dev": "tsx watch index.ts"
+    "dev": "tsx watch index.ts",
+    "lint": "eslint"
   },
   "keywords": [
     "bot",
     "telegram",
-    "nodejs"
+    "nodejs",
+    "typescript",
+    "welcome-bot"
   ],
   "author": "wmgcat",
   "license": "MIT",
-  "description": "",
   "dependencies": {
     "dotenv": "^17.2.2",
     "telegraf": "^4.16.3",
@@ -22,6 +25,11 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@types/node": "^25.0.8"
+    "@eslint/js": "^10.0.1",
+    "@telegraf/types": "^9.2.1",
+    "@types/node": "^25.0.8",
+    "eslint": "^10.13.0",
+    "jiti": "^2.7.0",
+    "typescript-eslint": "^8.71.2"
   }
 }

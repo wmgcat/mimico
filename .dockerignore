@@ -1,0 +1,10 @@
+node_modules/
+.env
+.DS_Store
+.git
+package-lock.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+readme.md
+LICENSE.txt
+icon.png
