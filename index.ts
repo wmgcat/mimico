@@ -1,7 +1,6 @@
 import { Context, Telegraf } from "telegraf";
 import fs from "fs";
 import dotenv from "dotenv";
-import { message } from "telegraf/filters";
 import { Message, Update } from "telegraf/types";
 
 const info = fs.readFileSync("./src/info.txt", "utf-8");
@@ -13,18 +12,18 @@ const run = () => {
   if (!info)
     throw new Error("Please, set info for message");
 
-  const bot = new Telegraf(process.env.TOKEN);
+	const bot = new Telegraf(process.env.TOKEN!);
+
   const memory = new Map;
 
-  const onChecker = async (ctx: Context<Update>, retry: number=0): Promise<boolean> => {
+  const onChecker = (ctx: Context<Update>, retry: number=0): boolean => {
 		try {
 			if (retry > 2)
 				return false;
 
-			if (!ctx?.message)
-				return false;
+			console.log(ctx?.message);
 
-			const msg = ctx.message as Message & {
+			const msg = ctx?.message as Message & {
 				is_automatic_forward?: boolean;
 				media_group_id?: string;
 			};
@@ -41,12 +40,10 @@ const run = () => {
       if (memory.has(memory_key))
 				return false;
 
-      await ctx.replyWithPhoto({
+      ctx.replyWithPhoto({
 				source: "./src/banner.png"
 			}, {
-				reply_parameters: {
-					message_id: msg?.message_id
-				},
+				reply_to_message_id: msg?.message_id,
 				caption: info
       });
 
@@ -57,14 +54,21 @@ const run = () => {
 
 			return true;
     }
-    catch {
-			await onChecker(ctx, retry + 1);
+    catch(err) {
+			console.error(err);
+			onChecker(ctx, retry + 1);
 			return false;
 		}
   }
 
-  bot.on(message("text"), (ctx: Context) => onChecker?.(ctx));
+  bot.on("message", (ctx: Context) => onChecker?.(ctx));
   bot.launch();
+	bot.catch((error, ctx) => {
+		console.error("Update error:", {
+			updateId: ctx.update.update_id,
+			error
+		});
+	});
 
   process.once("SIGINT", () => bot.stop("SIGINT"));
 	process.once("SIGTERM", () => bot.stop("SIGTERM"));
